@@ -16,6 +16,10 @@ namespace UtilityApp.Classes {
                 return response;
             }
 
+            if (command.Contains("cmd ")) {
+                response.Response = await ProgramLauncher.RunCmd(command.Split("cmd ")[1]);
+            }
+
             response.IsCorrect = false;
             return response;
         }

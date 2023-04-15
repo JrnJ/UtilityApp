@@ -16,6 +16,13 @@ namespace UtilityApp.Classes {
             set { _commandErrorMessage = value; }
         }
 
+        private string? _response;
+
+        public string? Response {
+            get { return _response; }
+            set { _response = value; }
+        }
+
         public CommandResponse() {
             
         }

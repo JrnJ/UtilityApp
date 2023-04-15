@@ -94,7 +94,9 @@ namespace UtilityApp {
                 case Key.Enter:
                     TextPointer caretLineEnd = rtbCmd.CaretPosition.GetLineStartPosition(1);
                     caretLineEnd ??= rtbCmd.Document.ContentEnd;
-                    await Classes.CommandManager.RunCommand(new TextRange(rtbCmd.CaretPosition.GetLineStartPosition(0), caretLineEnd).Text.Trim()[2..]);
+                    CommandResponse response = await Classes.CommandManager.RunCommand(
+                        new TextRange(rtbCmd.CaretPosition.GetLineStartPosition(0), caretLineEnd).Text.Trim()[2..]);
+                    AddLineToRichTextBox(rtbCmd, response.Response);
                     e.Handled = true;
 
                     // TODO: make this work with multiple lines first

@@ -38,7 +38,7 @@
                     <TextBlock Text="{Binding TempText}"/>
                 </Grid>
 
-                <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="100">
+                <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="250">
                     <Border BorderThickness="1" BorderBrush="#80969696" SnapsToDevicePixels="True"
                             Margin="20, 0, 20, 0" 
                             >

@@ -7,6 +7,24 @@ using System.Diagnostics;
 
 namespace UtilityApp.Classes {
     internal static class ProgramLauncher {
+
+        public static async Task<string> RunCmd(string command) {
+            ProcessStartInfo processStartInfo = new("cmd", $"/c cd C:\\ && {command}") {
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            Process process = new() {
+                StartInfo = processStartInfo
+            };
+            process.Start();
+            string output = await process.StandardOutput.ReadToEndAsync();
+            await process.WaitForExitAsync();
+
+            // output = Environment.GetEnvironmentVariable("JAVA_HOME");
+            return output;
+        }
+
         public static void RunApplication(string path) {
             Process.Start(path);
         }
