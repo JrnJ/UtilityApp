@@ -38,6 +38,13 @@ namespace UtilityApp {
             set { _globalHotKeyManager = value; }
         }
 
+        private Classes.CommandManager _commandManager;
+
+        public Classes.CommandManager CommandManager {
+            get { return _commandManager; }
+            set { _commandManager = value; }
+        }
+
         public MainWindow() {
             InitializeComponent();
 
@@ -47,6 +54,9 @@ namespace UtilityApp {
 
             this.Width = WindowWidth;
             this.Height = SystemParameters.PrimaryScreenHeight - TaskbarUtilities.GetTaskbarHeight();
+
+            // 
+            _commandManager = new();
 
             // Focus on CMD
             rtbCmd.Document.Blocks.Clear();
@@ -94,9 +104,12 @@ namespace UtilityApp {
                 case Key.Enter:
                     TextPointer caretLineEnd = rtbCmd.CaretPosition.GetLineStartPosition(1);
                     caretLineEnd ??= rtbCmd.Document.ContentEnd;
-                    CommandResponse response = await Classes.CommandManager.RunCommand(
+                    CommandResponse response = await CommandManager.RunCommand(
                         new TextRange(rtbCmd.CaretPosition.GetLineStartPosition(0), caretLineEnd).Text.Trim()[2..]);
-                    AddLineToRichTextBox(rtbCmd, response.Response);
+
+                    if (response.Response != "") {
+                        AddLineToRichTextBox(rtbCmd, response.Response);
+                    }
                     e.Handled = true;
 
                     // TODO: make this work with multiple lines first

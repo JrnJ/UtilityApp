@@ -26,7 +26,13 @@ namespace UtilityApp.Classes {
         }
 
         public static void RunApplication(string path) {
-            Process.Start(path);
+            try {
+                Process.Start(path);
+            } catch {
+                if (!path.Contains(".exe")) {
+                    RunApplication(path + ".exe");
+                }
+            }
         }
 
         public static void RunApplication(ProcessStartInfo processStartInfo) {
