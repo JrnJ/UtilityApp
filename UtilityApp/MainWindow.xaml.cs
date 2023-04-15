@@ -48,6 +48,12 @@ namespace UtilityApp {
             this.Width = WindowWidth;
             this.Height = SystemParameters.PrimaryScreenHeight - TaskbarUtilities.GetTaskbarHeight();
 
+            // Focus on CMD
+            rtbCmd.Document.Blocks.Clear();
+            AddLineToRichTextBox(rtbCmd, "> ");
+            rtbCmd.CaretPosition = rtbCmd.Document.ContentEnd;
+            rtbCmd.Focus();
+
             // Bottom
             this.DataContext = this;
         }
@@ -74,10 +80,78 @@ namespace UtilityApp {
             this.Close();
         }
 
+        // TODO: remove this
+        private string _tempText;
+
+        public string TempText {
+            get { return _tempText; }
+            set { _tempText = value; OnPropertyChanged(); }
+        }
+
+        private async void CommandLinePreviewKeyDown(object sender, KeyEventArgs e) {
+            switch (e.Key) {
+
+                case Key.Enter:
+                    TextPointer caretLineEnd = rtbCmd.CaretPosition.GetLineStartPosition(1);
+                    caretLineEnd ??= rtbCmd.Document.ContentEnd;
+                    await Classes.CommandManager.RunCommand(new TextRange(rtbCmd.CaretPosition.GetLineStartPosition(0), caretLineEnd).Text.Trim()[2..]);
+                    e.Handled = true;
+
+                    // TODO: make this work with multiple lines first
+                    //AddLineToRichTextBox(rtbCmd, "> ");
+                    //rtbCmd.CaretPosition = rtbCmd.Document.ContentEnd;
+                    break;
+
+                case Key.Up:
+                    e.Handled = true;
+                    break;
+
+                case Key.Down:
+                    e.Handled = true;
+                    break;
+
+                case Key.Left:
+                case Key.Back:
+                    if (GetCaretIndex((RichTextBox)sender) <= 2) {
+                        e.Handled = true;
+                    }
+                    break;
+
+                case Key.Right:
+                    
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void CommandLinePreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if (!rtbCmd.IsFocused) {
+                rtbCmd.Focus();
+            }
+
+            e.Handled = true;
+        }
+
+        private static int GetCaretIndex(RichTextBox richTextBox) {
+            // TODO: make this a per line thing instead of per all lines
+            return new TextRange(richTextBox.Document.ContentStart, richTextBox.CaretPosition).Text.Length;
+        }
+
+        private static void AddLineToRichTextBox(RichTextBox richTextBox, string text) {
+            richTextBox.Document.Blocks.Add(new Paragraph(new Run(text)));
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        // TODO: remove this
+        private void rtbCmd_TextChanged(object sender, TextChangedEventArgs e) {
+            TempText = GetCaretIndex((RichTextBox)sender).ToString();
         }
     }
 }

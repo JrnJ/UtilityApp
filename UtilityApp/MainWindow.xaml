@@ -15,6 +15,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="32" /> <!-- Titlebar -->
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
@@ -34,7 +35,27 @@
                 </Grid>
 
                 <Grid Grid.Row="1">
-                    
+                    <TextBlock Text="{Binding TempText}"/>
+                </Grid>
+
+                <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="100">
+                    <Border BorderThickness="1" BorderBrush="#80969696" SnapsToDevicePixels="True"
+                            Margin="20, 0, 20, 0" 
+                            >
+                        <RichTextBox x:Name="rtbCmd"
+                                     Background="#000000"
+                                     BorderThickness="0"
+                                     Foreground="#CCCCCC" CaretBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" 
+                                     SelectionBrush="#999999"
+                                     FontFamily="Consolas" FontSize="16"
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     Block.LineHeight="1"
+                                     TextChanged="rtbCmd_TextChanged"
+                                     
+                                     Keyboard.PreviewKeyDown="CommandLinePreviewKeyDown"
+                                     PreviewMouseLeftButtonDown="CommandLinePreviewMouseLeftButtonDown"
+                                     />
+                    </Border>
                 </Grid>
             </Grid>
         </Border>
