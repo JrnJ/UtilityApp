@@ -31,9 +31,9 @@ namespace UtilityApp {
             set { _windowBackgroundColor = value; OnPropertyChanged(); }
         }
 
-        private GlobalHotKeyManager _globalHotKeyManager;
+        private GlobalHotKeyManager? _globalHotKeyManager;
 
-        public GlobalHotKeyManager GlobalHotKeyManager {
+        public GlobalHotKeyManager? GlobalHotKeyManager {
             get { return _globalHotKeyManager; }
             set { _globalHotKeyManager = value; }
         }
@@ -61,7 +61,7 @@ namespace UtilityApp {
 
         protected override void OnClosed(EventArgs e) {
 
-            GlobalHotKeyManager.Stop();
+            GlobalHotKeyManager?.Stop();
 
             base.OnClosed(e);
         }
@@ -74,9 +74,9 @@ namespace UtilityApp {
             this.Close();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string name = null) {
+        protected void OnPropertyChanged([CallerMemberName] string? name = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
